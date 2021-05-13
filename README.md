@@ -11,12 +11,20 @@ Select the target node where the realtime workload will run. Add a new worker la
 
 This label is used to select the nodes that will be tuned by the Peformance Addon Operator to run realtime workloads. Deploy the PAO by running the following command:
 
-`oc create -Rf manifests/01-pao`
+`oc create -Rf manifests/01-performance_addon_operator/`
+
+Wait until the changes have been applied to the target node by checking that the machine config pool for the new profile is in `UPDATED` state, like shown below:
+
+```bash
+$>oc get mcp worker-rt
+NAME        CONFIG   UPDATED   UPDATING   DEGRADED   MACHINECOUNT   READYMACHINECOUNT   UPDATEDMACHINECOUNT   DEGRADEDMACHINECOUNT   AGE
+worker-rt            True      False      False      1              0                   0                     0                      3m15s
+```
 
 3. Install CDI (Container Data Importer)
 CDI is used to import the docker image of the customized RHEL as a data volume. Follow the instructions defined in the [CDI documentation page](https://kubevirt.io/user-guide/operations/containerized_data_importer/#install-cdi).
 
-4. Install the Kubevirt manifests
+4. Install the customized Kubevirt manifests
 
 `oc create -Rf manifests/02-kubevirt/`
 
