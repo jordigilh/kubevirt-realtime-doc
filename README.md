@@ -62,9 +62,9 @@ rhel-realtime   Succeeded   100.0%                2m30s
 This will create the VM, VMI and the pod in the `poc` namespace.
 
 ```bash
-oc get pod -n poc
-NAME                              READY   STATUS    RESTARTS   AGE
-virt-launcher-vm-realtime-wscgv   1/1     Running   0          2m23s
+oc get pod -n poc -o wide
+NAME                              READY   STATUS    RESTARTS   AGE     IP            NODE         NOMINATED NODE   READINESS GATES
+virt-launcher-vm-realtime-wscgv   1/1     Running   0          41s     10.131.1.41   worker-0-0   <none>           <none>
 ```
 
 To access the console of the VM, use the `virtctl` [client tool](https://kubevirt.io/user-guide/operations/virtctl_client_tool/):
