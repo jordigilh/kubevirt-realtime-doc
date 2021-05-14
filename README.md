@@ -2,18 +2,20 @@
 Manifests and documentation for running a RHEL8 VM under a customized Kubevirt version
 
 1. Setting up your host environment
-Tune your RHEL bare metal host for realtime kernel and pin your CPUs to run under realtime
+
+Tune your RHEL bare metal host for realtime kernel and pin your CPUs to run under realtime. You can follow the steps described in the [RHEL documentation](https://access.redhat.com/rhel-real-time-getting-started)
 
 2. Configuring OCP for realtime workloads
+
 Select the target node where the realtime workload will run. Add a new worker lable using this command:
 
 `oc label node worker-0-0 node-role.kubernetes.io/worker-rt=""`
 
-This label is used to select the nodes that will be tuned by the Peformance Addon Operator to run realtime workloads. Deploy the PAO by running the following command:
+This label is used to select the nodes that will be tuned by the Peformance Addon Operator to run realtime workloads. Next, deploy the PAO by running the following command:
 
 `oc create -Rf manifests/01-performance_addon_operator/`
 
-Wait until the changes have been applied to the target node by checking that the machine config pool for the new profile is in `UPDATED` state, like shown below:
+Wait until the changes have been applied to the target node by checking that the machine config pool for the new profile has `True` in the `UPDATED` state, like shown below:
 
 ```bash
 $>oc get mcp worker-rt
@@ -24,7 +26,20 @@ worker-rt            True      False      False      1              0           
 3. Install CDI (Container Data Importer)
 CDI is used to import the docker image of the customized RHEL as a data volume. Follow the instructions defined in the [CDI documentation page](https://kubevirt.io/user-guide/operations/containerized_data_importer/#install-cdi).
 
+Wait until all the pods in the `cdi` namespace are in Running state:
+
+```bash
+oc get pod -n cdi
+NAME                              READY   STATUS    RESTARTS   AGE
+cdi-apiserver-84859fdbf5-nd8mz    1/1     Running   0          3m
+cdi-deployment-7bd668b89-gdtx4    1/1     Running   0          3m
+cdi-operator-5757c84894-dvwj4     1/1     Running   0          3m
+cdi-uploadproxy-74b9677bb-m7p9f   1/1     Running   0          3m
+```
+
 4. Install the customized Kubevirt manifests
+
+Deploy the customized Kubevirt by executing the following command:
 
 `oc create -Rf manifests/02-kubevirt/`
 
