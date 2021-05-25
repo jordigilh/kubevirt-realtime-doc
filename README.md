@@ -9,11 +9,15 @@ Tune your RHEL bare metal host for realtime kernel and pin your CPUs to run unde
 
 Select the target node where the realtime workload will run. Add a new worker lable using this command:
 
-`oc label node worker-0-0 node-role.kubernetes.io/worker-rt=""`
+```bash
+$>oc label node worker-0-0 node-role.kubernetes.io/worker-rt=""
+```
 
 This label is used to select the nodes that will be tuned by the Peformance Addon Operator to run realtime workloads. Next, deploy the PAO by running the following command:
 
-`oc create -Rf manifests/01-performance_addon_operator/`
+```bash
+$>oc create -Rf manifests/01-performance_addon_operator/
+```
 
 Wait until the changes have been applied to the target node by checking that the machine config pool for the new profile has `True` in the `UPDATED` state, like shown below:
 
@@ -23,25 +27,13 @@ NAME        CONFIG   UPDATED   UPDATING   DEGRADED   MACHINECOUNT   READYMACHINE
 worker-rt            True      False      False      1              0                   0                     0                      3m15s
 ```
 
-3. Install CDI (Container Data Importer)
-CDI is used to import the docker image of the customized RHEL as a data volume. Follow the instructions defined in the [CDI documentation page](https://kubevirt.io/user-guide/operations/containerized_data_importer/#install-cdi).
-
-Wait until all the pods in the `cdi` namespace are in Running state:
-
-```bash
-oc get pod -n cdi
-NAME                              READY   STATUS    RESTARTS   AGE
-cdi-apiserver-84859fdbf5-nd8mz    1/1     Running   0          3m
-cdi-deployment-7bd668b89-gdtx4    1/1     Running   0          3m
-cdi-operator-5757c84894-dvwj4     1/1     Running   0          3m
-cdi-uploadproxy-74b9677bb-m7p9f   1/1     Running   0          3m
-```
-
-4. Install the customized Kubevirt manifests
+3. Install the customized Kubevirt manifests
 
 Deploy the customized Kubevirt by executing the following command:
 
-`oc create -Rf manifests/02-kubevirt/`
+```bash
+$>oc create -Rf manifests/02-kubevirt/
+```
 
 Wait until all the pods in the `kubevirt` namespace are in `Running` state:
 
@@ -58,26 +50,16 @@ virt-operator-788b865d68-4zrg8     1/1     Running   0          2m48s
 virt-operator-788b865d68-sjztd     1/1     Running   0          2m48s
 ```
 
-5. Create the `poc` namespace and import the dockerized RHEL image using a datavolume:
-
-`oc create -f manifests/03-datavolume/`
-
-Wait until the data volume has reached the `Succeeded` phase: 
+4. Create the `poc` namespace and deploy the VM manifest 
 
 ```bash
-$>oc get dv -n poc
-NAME            PHASE       PROGRESS   RESTARTS   AGE
-rhel-realtime   Succeeded   100.0%                2m30s
+$>oc create -Rf manifests/03-vm
 ```
-
-6. Deploy the VM manifest
-
-`oc create -Rf manifests/04-vm`
 
 This will create the VM, VMI and the pod in the `poc` namespace.
 
 ```bash
-oc get pod -n poc -o wide
+$>oc get pod -n poc -o wide
 NAME                              READY   STATUS    RESTARTS   AGE     IP            NODE         NOMINATED NODE   READINESS GATES
 virt-launcher-vm-realtime-wscgv   1/1     Running   0          41s     10.131.1.41   worker-0-0   <none>           <none>
 ```

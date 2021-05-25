@@ -21,7 +21,7 @@ spec:
           disks:
           - disk:
               bus: virtio
-            name: imgdisk      
+            name: containerdisk      
         machine:
           type: ""
         resources:
@@ -47,6 +47,6 @@ spec:
             pageSize: 1Gi
       terminationGracePeriodSeconds: 0
       volumes:
-        - name: imgdisk
-          dataVolume:
-            name: rhel-realtime
+      - containerDisk:
+          image: quay.io/jordigilh/rhel8-rt:qcow2
+        name: containerdisk
