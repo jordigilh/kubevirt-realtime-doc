@@ -10,13 +10,13 @@ Tune your RHEL bare metal host for realtime kernel and pin your CPUs to run unde
 Select the target node where the realtime workload will run. Add a new worker lable using this command:
 
 ```bash
-$>oc label node worker-0-0 node-role.kubernetes.io/worker-rt=""
+oc label node worker-0-0 node-role.kubernetes.io/worker-rt=""
 ```
 
 This label is used to select the nodes that will be tuned by the Peformance Addon Operator to run realtime workloads. Next, deploy the PAO by running the following command:
 
 ```bash
-$>oc create -Rf manifests/01-performance_addon_operator/
+oc create -Rf manifests/01-performance_addon_operator/
 ```
 
 Wait until the changes have been applied to the target node by checking that the machine config pool for the new profile has `True` in the `UPDATED` state, like shown below:
@@ -32,7 +32,7 @@ worker-rt            True      False      False      1              0           
 Deploy the customized Kubevirt by executing the following command:
 
 ```bash
-$>oc create -Rf manifests/02-kubevirt/
+oc create -Rf manifests/02-kubevirt/
 ```
 
 Wait until all the pods in the `kubevirt` namespace are in `Running` state:
@@ -53,7 +53,7 @@ virt-operator-788b865d68-sjztd     1/1     Running   0          2m48s
 4. Create the `poc` namespace and deploy the VM manifest 
 
 ```bash
-$>oc create -Rf manifests/03-vm
+oc create -Rf manifests/03-vm
 ```
 
 This will create the VM, VMI and the pod in the `poc` namespace.
