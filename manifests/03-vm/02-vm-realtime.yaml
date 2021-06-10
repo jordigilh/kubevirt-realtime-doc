@@ -48,6 +48,6 @@ spec:
       terminationGracePeriodSeconds: 0
       volumes:
       - hostDisk:
-          path: /root/rhel8-rt.img
+          path: /vm-storage/rhel8-rt.img
           type: Disk
         name: host-disk
