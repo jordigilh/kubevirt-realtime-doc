@@ -21,7 +21,7 @@ spec:
           disks:
           - disk:
               bus: virtio
-            name: containerdisk      
+            name: host-disk
         machine:
           type: ""
         resources:
@@ -47,6 +47,7 @@ spec:
             pageSize: 1Gi
       terminationGracePeriodSeconds: 0
       volumes:
-      - containerDisk:
-          image: quay.io/jordigilh/rhel8-rt:qcow2
-        name: containerdisk
+      - hostDisk:
+          path: /root/rhel8-rt.img
+          type: Disk
+        name: host-disk
