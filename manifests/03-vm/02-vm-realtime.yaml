@@ -23,7 +23,7 @@ spec:
               bus: virtio
             name: host-disk
         machine:
-          type: ""
+          type: "q35"
         resources:
           requests:
             memory: 3Gi
