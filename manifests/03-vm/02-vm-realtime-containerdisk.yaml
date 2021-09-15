@@ -1,0 +1,56 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    kubevirt.io/vm: vm-realtime
+  name: vm-realtime
+  namespace: poc
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: vm-realtime
+    spec:
+      domain:
+        devices:
+          autoattachSerialConsole: true
+          autoattachMemBalloon: false
+          autoattachGraphicsDevice: false
+          disks:
+          - disk:
+              bus: virtio
+            name: containerdisk      
+        machine:
+          type: ""
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 2
+          limits:
+            memory: 4Gi
+            cpu: 2
+        cpu:
+          model: host-passthrough
+          cores: 2
+          sockets: 1
+          threads: 1
+          dedicatedCpuPlacement: true
+          isolateEmulatorThread: true
+          ioThreadsPolicy: auto
+          features:
+            - name: tsc-deadline
+              policy: require
+          numa:
+            guestMappingPassthrough: {}
+          realtime: {}              
+        memory:
+          hugepages:
+            pageSize: 1Gi
+          guest: 3Gi
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - containerDisk:
+          image: quay.io/jordigilh/rhel8-rt:qcow2
+        name: containerdisk
