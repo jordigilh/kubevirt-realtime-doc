@@ -8,7 +8,7 @@ spec:
   certificateRotateStrategy: {}
   configuration:
     developerConfiguration:
-      featureGates: [CPUManager, DataVolumes, HostDisk]
+      featureGates: [CPUManager, NUMA, DataVolumes, HostDisk]
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
