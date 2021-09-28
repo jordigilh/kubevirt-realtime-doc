@@ -4192,14 +4192,6 @@ metadata:
   name: kubevirt-operator
 rules:
 - apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - create
-  - get
-  - update
-- apiGroups:
   - kubevirt.io
   resources:
   - kubevirts
@@ -4361,14 +4353,6 @@ rules:
   - delete
   - update
   - patch
-- apiGroups:
-  - subresources.kubevirt.io
-  resources:
-  - virtualmachines/start
-  - virtualmachines/stop
-  - virtualmachines/restart
-  verbs:
-  - put
 - apiGroups:
   - subresources.kubevirt.io
   resources:
@@ -4939,24 +4923,24 @@ spec:
         - "2"
         env:
         - name: OPERATOR_IMAGE
-          value: quay.io/jordigilh/virt-operator@sha256:24dcf836d0a7b9cd390a0727c4c9a96f0aa718771f425dc36e59c6ab4f525a36
+          value: quay.io/jordigilh/virt-operator@sha256:17c09a58840654e48286a50eec9b005f630682594ec824dca82eeb3f62f2f717
         - name: WATCH_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['olm.targetNamespaces']
         - name: KUBEVIRT_VERSION
-          value: beta
+          value: emulatorsched
         - name: VIRT_API_SHASUM
-          value: sha256:d65f3c3eac939e8ab6dcf010bc8598c06caa8b56c67043c97b4c1eb5d153808e
+          value: sha256:bbc03c6477fd291f212d4ba63003f4af061f7c7c819a6fc7ef019b001ba567a8
         - name: VIRT_CONTROLLER_SHASUM
-          value: sha256:d21201c2e4b784b8a8660b569494b4d6c58388cdcd6d127c32b5449bbd10b57a
+          value: sha256:b91026b0e6b9edbae951d14aa0cbc35a2b14dd8948d27f29b51aa60fc3895a00
         - name: VIRT_HANDLER_SHASUM
-          value: sha256:e9d84163ed66a7d2ebc663f4f848f898e8ecdb9bf61b86497a89784584cf5878
+          value: sha256:10941400d4fbe032c13013fdf37d17ac22d81eff1994287ca0394df5eb55d582
         - name: VIRT_LAUNCHER_SHASUM
-          value: sha256:50bf541bc39c7b792363f876507781b57e87e7df5a8a5b9e6103e28d37540149
+          value: sha256:bd401816d5c211a70ae576e63cd77c2d2075c50673aa74d57e27549e78980e09
         - name: GS_SHASUM
-          value: sha256:31c18807e86012075cd942a4c5fd5b91c2758f9a5c337fa57933bd324912190c
-        image: quay.io/jordigilh/virt-operator@sha256:24dcf836d0a7b9cd390a0727c4c9a96f0aa718771f425dc36e59c6ab4f525a36
+          value: sha256:305e96535b90ea0acb81fe08be9112fcecfbf5a3bffd0eb3e81323abdf085a26
+        image: quay.io/jordigilh/virt-operator@sha256:17c09a58840654e48286a50eec9b005f630682594ec824dca82eeb3f62f2f717
         imagePullPolicy: IfNotPresent
         name: virt-operator
         ports:
@@ -4981,6 +4965,8 @@ spec:
         - mountPath: /etc/virt-operator/certificates
           name: kubevirt-operator-certs
           readOnly: true
+        - mountPath: /profile-data
+          name: profile-data
       priorityClassName: kubevirt-cluster-critical
       securityContext:
         runAsNonRoot: true
@@ -4993,3 +4979,5 @@ spec:
         secret:
           optional: true
           secretName: kubevirt-operator-certs
+      - emptyDir: {}
+        name: profile-data
